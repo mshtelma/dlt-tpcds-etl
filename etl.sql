@@ -17,9 +17,11 @@ FROM live.date_dim_landing;
 
 -- COMMAND ----------
 
-CREATE LIVE TABLE date_dim_curated 
+CREATE
+LIVE TABLE date_dim_curated
 COMMENT "Date Dim Curated"
-AS SELECT * 
+AS
+SELECT *
 FROM live.date_dim_staging;
 
 -- COMMAND ----------
@@ -117,13 +119,20 @@ CREATE INCREMENTAL LIVE TABLE catalog_sales_curated (
 PARTITIONED BY (cs_sold_date_sk)
 
 -- COMMAND ----------
+CREATE STREAMING LIVE VIEW catalog_sales_landing (
 
-CREATE STREAMING LIVE VIEW catalog_sales_staging (
+)
+COMMENT "Catalog Sales Landing"
+AS SELECT *
+FROM STREAM(tpcds1gb.catalog_sales);
+-- COMMAND ----------
+
+CREATE STREAMING LIVE TABLE catalog_sales_staging (
  
 )
 COMMENT "Cleansed cdc data, tracking data quality with a view. We ensude valid JSON, id and operation type"
 AS SELECT * 
-FROM STREAM(tpcds1gb.catalog_sales);
+FROM STREAM(live.catalog_sales_landing);
 
 -- COMMAND ----------
 
@@ -209,3 +218,60 @@ CREATE INCREMENTAL LIVE TABLE web_sales (
   ws_net_profit DECIMAL(7, 2)
 ) USING delta 
 PARTITIONED BY (ws_sold_date_sk)
+
+
+-- COMMAND ----------
+CREATE STREAMING LIVE VIEW web_sales_landing (
+
+)
+COMMENT "Web Sales Landing"
+AS SELECT *
+FROM STREAM(tpcds1gb.web_sales);
+-- COMMAND ----------
+
+CREATE STREAMING LIVE TABLE web_sales_staging (
+)
+COMMENT "Web Sales Staging"
+AS SELECT *
+FROM STREAM(live.web_sales_landing);
+
+-- COMMAND ----------
+
+CREATE STREAMING LIVE VIEW web_sales_clean AS
+SELECT
+  ws.*
+FROM
+  STREAM(live.web_sales_staging) ws
+  join live.date_dim_curated dd1 on ws.ws_sold_date_sk = dd1.d_date_sk
+  join live.date_dim_curated dd2 on ws.ws_ship_date_sk = dd2.d_date_sk
+
+-- COMMAND ----------
+
+APPLY CHANGES INTO live.web_sales_curated
+FROM
+  stream(live.web_sales_clean) KEYS (ws_item_sk, ws_order_number) SEQUENCE BY ws_sold_date_sk
+
+-- COMMAND ----------
+
+CREATE LIVE TABLE web_sales_curated_pk_constraint(
+  CONSTRAINT unique_pk EXPECT (num_entries = 1)
+)
+AS SELECT ws_item_sk, ws_order_number, count(*) as num_entries
+FROM LIVE.web_sales_curated
+GROUP BY ws_item_sk, ws_order_number
+
+
+-- COMMAND ----------
+
+CREATE STREAMING LIVE TABLE web_sales_quarantine AS
+SELECT
+  ws.*
+FROM
+  STREAM(live.web_sales_staging) ws
+  LEFT ANTI JOIN live.date_dim_curated dd1 on ws.ws_sold_date_sk = dd1.d_date_sk
+UNION ALL
+SELECT
+  ws.*
+FROM
+  STREAM(live.web_sales_staging) ws
+  LEFT ANTI JOIN live.date_dim_curated dd2 on ws.ws_ship_date_sk = dd2.d_date_sk

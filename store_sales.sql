@@ -1,50 +1,49 @@
 -- Databricks notebook source
-
 -- MAGIC %md # Web Sales
 
 -- COMMAND ----------
 
-CREATE INCREMENTAL LIVE TABLE store_sales_curated
-(
-    ss_sold_date_sk       INT,
-    ss_sold_time_sk       INT,
-    ss_item_sk            INT,
-    ss_customer_sk        INT,
-    ss_cdemo_sk           INT,
-    ss_hdemo_sk           INT,
-    ss_addr_sk            INT,
-    ss_store_sk           INT,
-    ss_promo_sk           INT,
-    ss_ticket_number      BIGINT,
-    ss_quantity           INT,
-    ss_wholesale_cost     DECIMAL(7, 2),
-    ss_list_price         DECIMAL(7, 2),
-    ss_sales_price        DECIMAL(7, 2),
-    ss_ext_discount_amt   DECIMAL(7, 2),
-    ss_ext_sales_price    DECIMAL(7, 2),
-    ss_ext_wholesale_cost DECIMAL(7, 2),
-    ss_ext_list_price     DECIMAL(7, 2),
-    ss_ext_tax            DECIMAL(7, 2),
-    ss_coupon_amt         DECIMAL(7, 2),
-    ss_net_paid           DECIMAL(7, 2),
-    ss_net_paid_inc_tax   DECIMAL(7, 2),
-    ss_net_profit         DECIMAL(7, 2)
+CREATE INCREMENTAL LIVE TABLE store_sales_curated (
+  ss_sold_date_sk INT,
+  ss_sold_time_sk INT,
+  ss_item_sk INT,
+  ss_customer_sk INT,
+  ss_cdemo_sk INT,
+  ss_hdemo_sk INT,
+  ss_addr_sk INT,
+  ss_store_sk INT,
+  ss_promo_sk INT,
+  ss_ticket_number BIGINT,
+  ss_quantity INT,
+  ss_wholesale_cost DECIMAL(7, 2),
+  ss_list_price DECIMAL(7, 2),
+  ss_sales_price DECIMAL(7, 2),
+  ss_ext_discount_amt DECIMAL(7, 2),
+  ss_ext_sales_price DECIMAL(7, 2),
+  ss_ext_wholesale_cost DECIMAL(7, 2),
+  ss_ext_list_price DECIMAL(7, 2),
+  ss_ext_tax DECIMAL(7, 2),
+  ss_coupon_amt DECIMAL(7, 2),
+  ss_net_paid DECIMAL(7, 2),
+  ss_net_paid_inc_tax DECIMAL(7, 2),
+  ss_net_profit DECIMAL(7, 2)
 ) USING delta PARTITIONED BY (ss_sold_date_sk);
 
 -- COMMAND ----------
-CREATE STREAMING LIVE VIEW store_sales_landing (
 
-)
-COMMENT "Store Sales Landing"
-AS SELECT *
-FROM STREAM(tpcds1gb.store_sales);
+CREATE STREAMING LIVE VIEW store_sales_landing () COMMENT "Store Sales Landing" AS
+SELECT
+  *
+FROM
+  STREAM(tpcds1gb.store_sales);
+
 -- COMMAND ----------
 
-CREATE STREAMING LIVE TABLE store_sales_staging (
-)
-COMMENT "Store Sales Staging"
-AS SELECT *
-FROM STREAM(live.store_sales_landing);
+CREATE STREAMING LIVE TABLE store_sales_staging () COMMENT "Store Sales Staging" AS
+SELECT
+  *
+FROM
+  STREAM(live.store_sales_landing);
 
 -- COMMAND ----------
 
@@ -54,7 +53,7 @@ SELECT
 FROM
   STREAM(live.store_sales_staging) ss
   join live.date_dim_curated dd1 on ss.ss_sold_date_sk = dd1.d_date_sk
-  join live.date_dim_curated dd2 on ss.ss_ship_date_sk = dd2.d_date_sk
+
 
 -- COMMAND ----------
 
@@ -76,15 +75,8 @@ GROUP BY ss_item_sk, ss_ticket_number
 
 CREATE STREAMING LIVE TABLE store_sales_quarantine AS
 SELECT
-  ws.*
+  ss.*
 FROM
   STREAM(live.store_sales_staging) ss
   LEFT ANTI JOIN live.date_dim_curated dd1 on ss.ss_sold_date_sk = dd1.d_date_sk
-UNION ALL
-SELECT
-  ws.*
-FROM
-  STREAM(live.store_sales_staging) ss
-  LEFT ANTI JOIN live.date_dim_curated dd2 on ss.ss_ship_date_sk = dd2.d_date_sk
 
--- COMMAND ----------

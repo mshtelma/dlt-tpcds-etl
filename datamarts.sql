@@ -108,7 +108,7 @@ group by
   i_item_id
 order by
   i_item_id,
-  total_sales -- limit 100
+  total_sales
 
 -- COMMAND ----------
 
@@ -175,5 +175,4 @@ from
 order by
   promotions,
   total
-limit
-  100
+

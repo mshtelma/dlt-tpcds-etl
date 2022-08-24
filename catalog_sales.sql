@@ -1,6 +1,5 @@
 -- Databricks notebook source
-
-
+-- MAGIC 
 -- MAGIC %md # Catalog Sales Table
 
 -- COMMAND ----------
@@ -44,12 +43,14 @@ CREATE INCREMENTAL LIVE TABLE catalog_sales_curated (
 PARTITIONED BY (cs_sold_date_sk)
 
 -- COMMAND ----------
+
 CREATE STREAMING LIVE VIEW catalog_sales_landing (
 
 )
 COMMENT "Catalog Sales Landing"
 AS SELECT *
 FROM STREAM(${src_db}.catalog_sales);
+
 -- COMMAND ----------
 
 CREATE STREAMING LIVE TABLE catalog_sales_staging (
@@ -61,7 +62,11 @@ FROM STREAM(live.catalog_sales_landing);
 
 -- COMMAND ----------
 
-CREATE STREAMING LIVE VIEW catalog_sales_clean AS
+CREATE STREAMING LIVE VIEW catalog_sales_clean(
+  CONSTRAINT cs_quantity_gt_zero EXPECT (cs_quantity > 0) ON VIOLATION DROP ROW,
+  CONSTRAINT nn_cs_item_sk EXPECT (cs_quantity IS NOT NULL) ON VIOLATION DROP ROW,
+  CONSTRAINT nn_cs_order_number EXPECT (cs_order_number IS NOT NULL) ON VIOLATION DROP ROW
+) AS
 SELECT
   cs.*
 FROM
@@ -99,5 +104,3 @@ SELECT
 FROM
   STREAM(live.catalog_sales_staging) cs
   LEFT ANTI JOIN live.date_dim_curated dd2 on cs.cs_ship_date_sk = dd2.d_date_sk
-
--- COMMAND ----------

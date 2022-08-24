@@ -56,7 +56,7 @@ FROM STREAM(${src_db}.catalog_sales);
 CREATE STREAMING LIVE TABLE catalog_sales_staging (
 
 )
-COMMENT "Cleansed cdc data, tracking data quality with a view. We ensude valid JSON, id and operation type"
+COMMENT ""
 AS SELECT *
 FROM STREAM(live.catalog_sales_landing);
 

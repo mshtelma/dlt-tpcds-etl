@@ -4,8 +4,7 @@
 
 -- COMMAND ----------
 
-CREATE
-INCREMENTAL LIVE TABLE store_sales_curated
+CREATE INCREMENTAL LIVE TABLE store_sales_curated
 (
     ss_sold_date_sk       INT,
     ss_sold_time_sk       INT,
@@ -51,7 +50,7 @@ FROM STREAM(live.store_sales_landing);
 
 CREATE STREAMING LIVE VIEW store_sales_clean AS
 SELECT
-  ws.*
+  ss.*
 FROM
   STREAM(live.store_sales_staging) ss
   join live.date_dim_curated dd1 on ss.ss_sold_date_sk = dd1.d_date_sk

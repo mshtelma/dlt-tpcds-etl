@@ -16,7 +16,7 @@
   "libraries": [
     {
       "notebook": {
-        "path": "/Repos/MSH/dlt-tpc-ds-etl/dimenions"
+        "path": "/Repos/MSH/dlt-tpc-ds-etl/dimensions"
       }
     },
     {

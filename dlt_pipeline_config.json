@@ -45,6 +45,9 @@
       }
     }
   ],
+   "configuration": {
+        "src_db": "tpcds1gb"
+    },
   "name": "msh-dlt-tpcds-etl",
   "storage": "dbfs:/Users/msh/dlt/msh_dlt_tpcds",
   "target": "msh_dlt_tpcds"

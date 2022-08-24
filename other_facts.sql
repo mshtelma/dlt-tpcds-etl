@@ -7,7 +7,7 @@
 CREATE LIVE VIEW item_landing
 COMMENT "Item Landing"
 AS SELECT *
-FROM tpcds1gb.item;
+FROM ${src_db}.item;
 
 -- COMMAND ----------
 

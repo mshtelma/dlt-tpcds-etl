@@ -179,6 +179,7 @@ order by
 
 -- COMMAND ----------
 
+-- This datamart provides aggregated sales per date/order. For every order there is pipe-delimited list of Items in the order.
 CREATE LIVE TABLE aggregated_catalog_sales AS
 SELECT 
 	d.d_date,

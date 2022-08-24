@@ -1,6 +1,5 @@
 -- Databricks notebook source
-
-
+-- MAGIC 
 -- MAGIC %md # Item
 
 -- COMMAND ----------
@@ -52,9 +51,10 @@ FROM live.customer_address_staging;
 -- COMMAND ----------
 
 -- MAGIC %md # Customer
+
 -- COMMAND ----------
 
-CREATE LIVE VIEW customer
+CREATE LIVE VIEW customer_landing
 COMMENT "Customer Landing"
 AS SELECT *
 FROM tpcds1gb.customer;
@@ -72,13 +72,14 @@ CREATE LIVE TABLE customer_curated
 COMMENT "Customer Curated"
 AS SELECT *
 FROM live.customer_staging;
+
 -- COMMAND ----------
 
 -- MAGIC %md # Promotion
 
 -- COMMAND ----------
 
-CREATE LIVE VIEW promotion
+CREATE LIVE VIEW promotion_landing
 COMMENT "Promotion Landing"
 AS SELECT *
 FROM tpcds1gb.promotion;
@@ -96,6 +97,7 @@ CREATE LIVE TABLE promotion_curated
 COMMENT "Promotion Curated"
 AS SELECT *
 FROM live.promotion_staging;
+
 -- COMMAND ----------
 
 -- MAGIC %md # Store
@@ -120,4 +122,3 @@ CREATE LIVE TABLE store_curated
 COMMENT "Store Curated"
 AS SELECT *
 FROM live.store_staging;
--- COMMAND ----------

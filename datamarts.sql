@@ -116,10 +116,11 @@ order by
 
 -- COMMAND ----------
 
+CREATE LIVE TABLE data_mart_61 AS
 select
   promotions,
   total,
-  cast(promotions as decimal(15, 4)) / cast(total as decimal(15, 4)) * 100
+  cast(promotions as decimal(15, 4)) / cast(total as decimal(15, 4)) * 100 result
 from
   (
     select
@@ -159,7 +160,7 @@ from
       live.date_dim_curated,
       live.customer_curated,
       live.customer_address_curated,
-     live.item
+      live.item_curated
     where
       ss_sold_date_sk = d_date_sk
       and ss_store_sk = s_store_sk
@@ -175,4 +176,3 @@ from
 order by
   promotions,
   total
-

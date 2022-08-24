@@ -49,7 +49,7 @@ CREATE STREAMING LIVE VIEW catalog_sales_landing (
 )
 COMMENT "Catalog Sales Landing"
 AS SELECT *
-FROM STREAM(tpcds1gb.catalog_sales);
+FROM STREAM(${src_db}.catalog_sales);
 -- COMMAND ----------
 
 CREATE STREAMING LIVE TABLE catalog_sales_staging (

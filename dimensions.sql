@@ -7,7 +7,7 @@
 CREATE LIVE VIEW date_dim_landing
 COMMENT "Date Dim Landing"
 AS SELECT *
-FROM tpcds1gb.date_dim;
+FROM ${src_db}.date_dim;
 
 -- COMMAND ----------
 

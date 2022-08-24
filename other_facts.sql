@@ -7,7 +7,7 @@
 CREATE LIVE VIEW item_landing
 COMMENT "Item Landing"
 AS SELECT *
-FROM tpcds1gb.item;
+FROM ${src_db}.item;
 
 -- COMMAND ----------
 
@@ -32,7 +32,7 @@ FROM live.item_staging;
 CREATE LIVE VIEW customer_address_landing
 COMMENT "Customer Address Landing"
 AS SELECT *
-FROM tpcds1gb.customer_address;
+FROM ${src_db}.customer_address;
 
 -- COMMAND ----------
 
@@ -57,7 +57,7 @@ FROM live.customer_address_staging;
 CREATE LIVE VIEW customer_landing
 COMMENT "Customer Landing"
 AS SELECT *
-FROM tpcds1gb.customer;
+FROM ${src_db}.customer;
 
 -- COMMAND ----------
 
@@ -82,7 +82,7 @@ FROM live.customer_staging;
 CREATE LIVE VIEW promotion_landing
 COMMENT "Promotion Landing"
 AS SELECT *
-FROM tpcds1gb.promotion;
+FROM ${src_db}.promotion;
 
 -- COMMAND ----------
 
@@ -107,7 +107,7 @@ FROM live.promotion_staging;
 CREATE LIVE VIEW store_landing
 COMMENT "Store Landing"
 AS SELECT *
-FROM tpcds1gb.store;
+FROM ${src_db}.store;
 
 -- COMMAND ----------
 

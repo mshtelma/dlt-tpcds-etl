@@ -48,7 +48,7 @@ CREATE STREAMING LIVE VIEW web_sales_landing (
 )
 COMMENT "Web Sales Landing"
 AS SELECT *
-FROM STREAM(tpcds1gb.web_sales);
+FROM STREAM(${src_db}.web_sales);
 -- COMMAND ----------
 
 CREATE STREAMING LIVE TABLE web_sales_staging (

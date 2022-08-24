@@ -35,7 +35,7 @@ CREATE STREAMING LIVE VIEW store_sales_landing () COMMENT "Store Sales Landing" 
 SELECT
   *
 FROM
-  STREAM(tpcds1gb.store_sales);
+  STREAM(${src_db}.store_sales);
 
 -- COMMAND ----------
 

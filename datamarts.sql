@@ -176,3 +176,23 @@ from
 order by
   promotions,
   total
+
+-- COMMAND ----------
+
+CREATE LIVE TABLE aggregated_catalog_sales AS
+SELECT 
+	d.d_date,
+	cs.cs_order_number,
+	SUM(cs.cs_wholesale_cost) 					AS wholesale_cost_agg,
+	SUM(cs_ext_ship_cost)						AS ext_ship_cost_agg,
+	SUM(cs.cs_ext_discount_amt)					AS ext_discount_amount_agg,
+	SUM(cs.cs_sales_price*cs.cs_quantity)		AS sales_amount_agg,
+	SUM(cs_list_price*cs.cs_quantity) 			AS list_amount_agg,
+	concat_ws(" | ",sort_array(collect_list(DISTINCT i.i_item_id)))	AS items_list
+FROM LIVE.catalog_sales_curated cs
+		JOIN LIVE.date_dim_curated	d on cs.cs_sold_date_sk=d.d_date_sk
+		JOIN LIVE.item_curated i on cs.cs_item_sk=i.i_item_sk
+GROUP BY d.d_date, cs.cs_order_number
+ORDER BY
+  d.d_date,
+  cs.cs_order_number

@@ -1,0 +1,51 @@
+{
+  "clusters": [
+    {
+      "label": "default",
+      "autoscale": {
+        "min_workers": 1,
+        "max_workers": 5
+      }
+    }
+  ],
+  "development": true,
+  "continuous": false,
+  "channel": "PREVIEW",
+  "edition": "ADVANCED",
+  "photon": true,
+  "libraries": [
+    {
+      "notebook": {
+        "path": "/Repos/MSH/dlt-tpc-ds-etl/dimenions"
+      }
+    },
+    {
+      "notebook": {
+        "path": "/Repos/MSH/dlt-tpc-ds-etl/other_facts"
+      }
+    },
+    {
+      "notebook": {
+        "path": "/Repos/MSH/dlt-tpc-ds-etl/catalog_sales"
+      }
+    },
+    {
+      "notebook": {
+        "path": "/Repos/MSH/dlt-tpc-ds-etl/web_sales"
+      }
+    },
+    {
+      "notebook": {
+        "path": "/Repos/MSH/dlt-tpc-ds-etl/store_sales"
+      }
+    },
+    {
+      "notebook": {
+        "path": "/Repos/MSH/dlt-tpc-ds-etl/datamarts"
+      }
+    }
+  ],
+  "name": "msh-dlt-tpcds-etl",
+  "storage": "dbfs:/Users/msh/dlt/msh_dlt_tpcds",
+  "target": "msh_dlt_tpcds"
+}

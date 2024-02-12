@@ -1,0 +1,27 @@
+{
+  "clusters": [
+    {
+      "label": "default",
+      "autoscale": {
+        "min_workers": 1,
+        "max_workers": 5
+      }
+    }
+  ],
+  "development": true,
+  "continuous": false,
+  "channel": "PREVIEW",
+  "edition": "ADVANCED",
+  "photon": true,
+  "libraries": [
+    {
+      "notebook": {
+        "path": "dlt_pipelines/python_test/test_pipeline"
+      }
+    }
+  ],
+  "name": "msh-dlt-test-1",
+  "catalog": "msh",
+  "target": "dlt_test1",
+  "data_sampling": false
+}

@@ -8,7 +8,7 @@ setup(
     description="ETL for TPC-DS dataset using Databricks Delta Live Tables",
     author="Michael Shtelma",
     url="",
-    install_requires=[],
+    install_requires=["databricks-sdk==0.19.0"],
     packages=find_packages(),
     long_description="",
     long_description_content_type="text/markdown",

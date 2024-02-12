@@ -16,39 +16,40 @@
   "libraries": [
     {
       "notebook": {
-        "path": "/Repos/MSH/dlt-tpc-ds-etl/dimensions"
+        "path": "dlt_pipelines/tpcds/dimensions"
       }
     },
     {
       "notebook": {
-        "path": "/Repos/MSH/dlt-tpc-ds-etl/other_facts"
+        "path": "dlt_pipelines/tpcds/other_facts"
       }
     },
     {
       "notebook": {
-        "path": "/Repos/MSH/dlt-tpc-ds-etl/catalog_sales"
+        "path": "dlt_pipelines/tpcds/catalog_sales"
       }
     },
     {
       "notebook": {
-        "path": "/Repos/MSH/dlt-tpc-ds-etl/web_sales"
+        "path": "dlt_pipelines/tpcds/web_sales"
       }
     },
     {
       "notebook": {
-        "path": "/Repos/MSH/dlt-tpc-ds-etl/store_sales"
+        "path": "dlt_pipelines/tpcds/store_sales"
       }
     },
     {
       "notebook": {
-        "path": "/Repos/MSH/dlt-tpc-ds-etl/datamarts"
+        "path": "dlt_pipelines/tpcds/datamarts"
       }
     }
   ],
    "configuration": {
-        "src_db": "tpcds1gb"
+        "src_db": "msh.tpcds1gb"
     },
   "name": "msh-dlt-tpcds-etl",
-  "storage": "dbfs:/Users/msh/dlt/msh_dlt_tpcds",
-  "target": "msh_dlt_tpcds"
+  "catalog": "msh",
+  "target": "dlt_tpcds",
+  "data_sampling": false
 }
